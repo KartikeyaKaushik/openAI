@@ -57,7 +57,7 @@ export default function PROFILE() {
       {typeof answer !== 'string' && answer.length > 0 ? (
         <div>
           <h2>Query Result:</h2>
-          <table border="1">
+          <table style={{ border: '1px solid black'}}>
             <thead>
               <tr>
                 <th>Product Code</th>
@@ -93,7 +93,7 @@ export default function PROFILE() {
           </table>
         </div>
       ) : (
-        <p style={{ marginTop: '15px' }}>{answer}</p>
+        <p style={{ marginTop: '15px' }}>{typeof answer === 'string' &&answer}</p>
       )}
     </>
   );

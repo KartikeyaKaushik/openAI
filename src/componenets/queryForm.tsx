@@ -22,8 +22,16 @@ const CustomTextField = styled(TextField)({
     },
   },
 });
+interface QueryFormProps {
+  question: string;
+  setQuestion: React.Dispatch<React.SetStateAction<string>>;
+  handleQuery: (event: React.FormEvent<HTMLFormElement>) => void;
+  isDisabled: boolean;
+  isLoading: boolean;
+  h4: string;
+}
 
-const QueryForm = ({ question, setQuestion, handleQuery, isDisabled, isLoading, h4 }) => {
+const QueryForm: React.FC<QueryFormProps> = ({ question, setQuestion, handleQuery, isDisabled, isLoading, h4 }) => {
   return (
     <Box
       component="form"

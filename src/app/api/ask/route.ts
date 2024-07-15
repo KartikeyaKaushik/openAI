@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       const [rows] = await pool.query(sqlQuery);
       return NextResponse.json(rows);
       // Process rows as needed
-  }
+    }
     // console.log(rows);
     
   } catch (error) {

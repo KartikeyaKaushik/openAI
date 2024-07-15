@@ -55,7 +55,7 @@ export default function AI() {
       {typeof answer !== 'string' && answer.length > 0 ? (
         <div >
           <h2>Query Result:</h2>
-          <table border="1">
+          <table style={{ border: '1px solid black'}}>
             <thead>
               <tr>
                 <th>Product Code</th>

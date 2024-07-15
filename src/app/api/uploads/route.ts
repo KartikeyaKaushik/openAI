@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+
+import { NextRequest, NextResponse } from 'next/server';
 import nextConnect from 'next-connect';
-import { NextResponse } from "next/server";
 import multer from 'multer';
 import axios from 'axios';
 import FormData from 'form-data';
@@ -13,7 +13,7 @@ const openai = new OpenAI({
   });
 
 // Middleware to run multer
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) {
+function runMiddleware(req: NextRequest, res: NextResponse, fn: Function) {
     return new Promise((resolve, reject) => {
       fn(req, res, (result: any) => {
         if (result instanceof Error) {

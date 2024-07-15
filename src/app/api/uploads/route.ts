@@ -25,14 +25,14 @@ function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) 
   }
   
   // Disable body parsing for the API route
-  export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+  // export const config = {
+  //   api: {
+  //     bodyParser: false,
+  //   },
+  // };
 
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     
   try {
     type imageResponse = {

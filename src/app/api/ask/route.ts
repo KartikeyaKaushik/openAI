@@ -118,10 +118,13 @@ export async function POST(req: NextRequest) {
 
     // Execute the SQL query
     
-    const [rows] = await pool.query(sqlQuery);
-    console.log(rows);
-
-    return NextResponse.json(rows);
+    if (sqlQuery) {
+      const [rows] = await pool.query(sqlQuery);
+      return NextResponse.json(rows);
+      // Process rows as needed
+  }
+    // console.log(rows);
+    
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });

@@ -32,7 +32,7 @@ function runMiddleware(req: NextRequest, res: NextResponse, fn: Function) {
   // };
 
 
-export async function POST (req: NextApiRequest, res: NextApiResponse) {
+export async function POST (req: NextRequest, res: NextResponse) {
     
   try {
     type imageResponse = {
@@ -49,7 +49,7 @@ export async function POST (req: NextApiRequest, res: NextApiResponse) {
         filePath: remoteFilePath,
         response: imageResponse,
       }, { status: 200 });
-  } catch (error) {
+  } catch (error:any) {
     return NextResponse.json({ message: 'Failed to process request', error: error.message }, { status: 500 });
   }
 };
@@ -78,24 +78,26 @@ async function getOpenAIResponse(imageUrl: string) {
   const imageResponse = responseOpenAI.choices[0].message.content;
   let cat = '';
   let subCat = '';
-
-  categories.data.forEach((item: { category: string }) => {
-    const itemName = item.category.replace('-', ' ');
-    const itemTrimmed = item.category.slice(0, -1).replace('-', ' ');
-    if (imageResponse.toLowerCase().includes(itemName.toLowerCase()) || imageResponse.toLowerCase().includes(itemTrimmed.toLowerCase())) {
-      cat = itemName;
-    }
-  });
-
-  if (!cat) {
-    subCategories.data.forEach((item: { name: string }) => {
-      const itemName = item.name;
-      const itemTrimmed = item.name.slice(0, -1);
-      if (imageResponse.toLowerCase().includes(itemName) || imageResponse.toLowerCase().includes(itemTrimmed)) {
-        subCat = itemName;
+  if(typeof imageResponse==='string'){
+    categories.data.forEach((item: { category: string }) => {
+      const itemName = item.category.replace('-', ' ');
+      const itemTrimmed = item.category.slice(0, -1).replace('-', ' ');
+      if (imageResponse.toLowerCase().includes(itemName.toLowerCase()) || imageResponse.toLowerCase().includes(itemTrimmed.toLowerCase())) {
+        cat = itemName;
       }
     });
+
+    if (!cat) {
+      subCategories.data.forEach((item: { name: string }) => {
+        const itemName = item.name;
+        const itemTrimmed = item.name.slice(0, -1);
+        if (imageResponse.toLowerCase().includes(itemName) || imageResponse.toLowerCase().includes(itemTrimmed)) {
+          subCat = itemName;
+        }
+      });
+    }
   }
+
 
   let hint = '';
   if (cat) {
@@ -106,7 +108,7 @@ async function getOpenAIResponse(imageUrl: string) {
   }
   if (!hint) {
     keywords.forEach((key) => {
-      if (imageResponse.toLowerCase().includes(key)) {
+      if (typeof imageResponse ==='string' && imageResponse.toLowerCase().includes(key)) {
         hint += `${key}, `;
       }
     });
@@ -150,9 +152,12 @@ async function getOpenAIResponse(imageUrl: string) {
   });
 
   const sqlQuery = openaiResponse.choices[0].message.content;
-  const [rows] = await pool.query(sqlQuery);
+  
+    if (sqlQuery) {
+      const [rows] = await pool.query(sqlQuery);
+      return { rows, res: imageResponse };
+    }
 
-  return { rows, res: imageResponse };
 }
 
 

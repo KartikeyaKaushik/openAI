@@ -3,25 +3,33 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function ImageUpload() {
+  interface Row {
+    unique_id: string;
+    Category: string;
+    subCategory: string;
+    orgName: string;
+  }
   const [file, setFile] = useState(null);
   const [message, setMessage] = useState('');
   const [responsee, setResponse] = useState('');
-  const [answer, setAnswer] = useState('');
+  const [answer, setAnswer] = useState<any>('');
   const [uploadedFilePath, setUploadedFilePath] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [isDisabled, setDisabled] = useState(false);
 
-  const onFileChange = (e) => {
+  const onFileChange = (e:any) => {
     
     setFile(e.target.files[0]);
   };
 
-  const onFileUpload = async (e) => {
+  const onFileUpload = async (e:any) => {
     e.preventDefault();
     setDisabled(true);
     setLoading(true);
     const formData = new FormData();
-    formData.append('file', file);
+    if(file){
+      formData.append('file', file);
+    }
 
     try {
         const res1 = await axios.post('https://sowtex.com/upload-image-openAI', formData, {
@@ -43,7 +51,7 @@ function ImageUpload() {
       setAnswer(res.data.response.rows);
       setUploadedFilePath(`${filePath}`);
       setMessage('File uploaded successfully');
-    } catch (err) {
+    } catch (err:any) {
       setLoading(false);
       setDisabled(false);
       if (err.response && err.response.status === 500) {
@@ -93,7 +101,7 @@ function ImageUpload() {
         {answer && typeof answer !== 'string' ? (
           <div>
             {/* <h2>Query Result:</h2> */}
-            <table border="1">
+            <table style={{ border: '1px solid black'}} >
               <thead>
                 <tr>
                   <th>Product Code</th>
@@ -103,7 +111,7 @@ function ImageUpload() {
                 </tr>
               </thead>
               <tbody>
-                {answer.map((row) => (
+                {answer.map((row:any) => (
                   <tr key={row.unique_id && row.unique_id}>
                     <td>
                       <a

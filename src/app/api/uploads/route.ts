@@ -32,7 +32,7 @@ function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: Function) 
   // };
 
 
-export default async function handler (req: NextApiRequest, res: NextApiResponse) {
+export async function POST (req: NextApiRequest, res: NextApiResponse) {
     
   try {
     type imageResponse = {

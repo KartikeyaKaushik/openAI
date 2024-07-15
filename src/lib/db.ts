@@ -1,9 +1,10 @@
+import { createPool, Pool } from 'mysql2/promise';
 
-import mysql from 'mysql2/promise';
-export const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'sowtexnet',
-    promiseConnection: true
-  });
+// Create MySQL pool
+export const pool: Pool = createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'sowtexnet',
+  Promise: global.Promise, // Make sure to include this for TypeScript to recognize the Promise type
+});
